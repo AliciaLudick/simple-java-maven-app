@@ -6,14 +6,12 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 @SpringBootApplication
-public class SimpleJavaMavenAppApplication extends SpringBootServletInitializer {
+public class SimpleJavaMavenAppApplication extends SpringBootServletInitializer{
 	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application){
 		return application.sources(SimpleJavaMavenAppApplication.class);
 	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(SimpleJavaMavenAppApplication.class, args);
 	}
