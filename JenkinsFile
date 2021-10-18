@@ -24,9 +24,9 @@ def buildLocation="target"
 def mavenTool = 'maven 3.3.9'
 def buildNode = "master"
 
-TomcatDeploymentManager development1 = new TomcatDeploymentManager(this, new URL("http://pklhubsand1.pepstores.com:8080/manager/"), "simple-java-maven-app-dev-admin-manager-credentials", "Spring/Restarts/Restart_tomcat_dev_pepjirafin_pepjirafinqa1", "pklhubsand1", [new URL("https://dataopswiki.pepkorit.com/")], "/oracle/tomcat/dev")
-TomcatDeploymentManager qa1 = new TomcatDeploymentManager(this, new URL("http://pklhubsand1.pepstores.com:8090/manager/"), "simple-java-maven-app-qa-admin-manager-credentials", "Spring/Restarts/Restart_tomcat_qa_pepjirafin_pepjirafinqa1", "pklhubsand1", [new URL("https://dataopswiki.pepkorit.com/")], "/oracle/tomcat/qa")
-TomcatDeploymentManager production1 = new TomcatDeploymentManager(this, new URL("http://pklhubsand1.pepstores.com:8100/manager/"), "simple-java-maven-app-prod-admin-manager-credentials", "Spring/Restarts/Restart_tomcat_prod_pepjirafin_pepjirafinpa1", "pklhubsand1", [new URL("https://dataopswiki.pepkorit.com/")], "/oracle/tomcat/prod")
+TomcatDeploymentManager development1 = new TomcatDeploymentManager(this, new URL("http://pklhubsand1.pepstores.com:8080/manager/"), "simple-java-maven-app-dev-admin-manager-credentials", "Spring/Restarts/Restart_tomcat_dev_pklhubsand1", "pklhubsand1", [new URL("https://dataopswiki.pepkorit.com/")], "/oracle/tomcat/dev")
+TomcatDeploymentManager qa1 = new TomcatDeploymentManager(this, new URL("http://pklhubsand1.pepstores.com:8090/manager/"), "simple-java-maven-app-qa-admin-manager-credentials", "Spring/Restarts/Restart_tomcat_qa_pklhubsand1", "pklhubsand1", [new URL("https://dataopswiki.pepkorit.com/")], "/oracle/tomcat/qa")
+TomcatDeploymentManager production1 = new TomcatDeploymentManager(this, new URL("http://pklhubsand1.pepstores.com:8100/manager/"), "simple-java-maven-app-prod-admin-manager-credentials", "Spring/Restarts/Restart_tomcat_prod_pklhubsand1", "pklhubsand1", [new URL("https://dataopswiki.pepkorit.com/")], "/oracle/tomcat/prod")
 
 MavenDeploymentProfile [] deploymentProfiles = new MavenDeploymentProfile[4]
 deploymentProfiles [0] = new MavenDeploymentProfile(this, "develop", "pepkorit-development-snapshots", "pitbin1", mavenTool, artifactName, appName, buildLocation, pomLocation, warModule, buildNode, [development1])
