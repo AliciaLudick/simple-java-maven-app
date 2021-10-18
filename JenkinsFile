@@ -1,0 +1,40 @@
+@Library('JavaMavenPipeline')
+@Library('JenkinsUtilities')
+
+import com.pepkor.devops.jenkins.pipeline.JavaMavenPipeline
+import groovy.json.JsonSlurper as jsonSlurper
+import groovy.json.JsonSlurperClassic
+import com.pepkor.devops.jenkins.deployment.profile.MavenDeploymentProfile
+import com.pepkor.devops.jenkins.utilities.logging.Logger
+import com.pepkor.devops.jenkins.utilities.logging.LogLevel
+import com.pepkor.devops.jenkins.deployment.manager.TomcatDeploymentManager
+
+// Set the Logging Level
+Logger.init(this, [ logLevel: LogLevel.INFO ])
+Logger log = new Logger(this)
+
+// Set Environment Variables
+def artifactName="smart-stream-jira.war"
+def appName="smart-stream-jira"
+properties properties: [[$class: 'GitLabConnectionProperty', gitLabConnection: 'Pepkor IT Gitlab']]
+
+def pomLocation="pom.xml"
+def warModule="pom.xml"
+def buildLocation="target"
+def mavenTool = 'maven 3.3.9'
+def buildNode = "master"
+
+TomcatDeploymentManager development1 = new TomcatDeploymentManager(this, new URL("http://pklhubsand1.pepstores.com:8080/manager/"), "pklhubsand1-pep-jira-fin-dev-admin-manager-credentials", "Spring/Restarts/Restart_tomcat_dev_pepjirafin_pepjirafinqa1", "pepjirafinqa1", [new URL("http://pepjirafinqa1.pepstores.com:10080/smart-stream-jira/management/health")], "/opt/pep-finance-jira_dev")
+TomcatDeploymentManager qa1 = new TomcatDeploymentManager(this, new URL("http://pepjirafinqa1.pepstores.com:20080/manager"), "pepjirafinqa1-pep-jira-fin-qa-admin-manager-credentials", "Spring/Restarts/Restart_tomcat_qa_pepjirafin_pepjirafinqa1", "pepjirafinqa1", [new URL("http://pepjirafinqa1.pepstores.com:20080/smart-stream-jira/management/health")], "/opt/pep-finance-jira_qa")
+TomcatDeploymentManager production1 = new TomcatDeploymentManager(this, new URL("http://pepjirafinpa1.pepstores.com:10080/manager"), "pepjirafinqa1-pep-jira-fin-prod-admin-manager-credentials", "Spring/Restarts/Restart_tomcat_prod_pepjirafin_pepjirafinpa1", "pepjirafinpa1", [new URL("http://pepjirafinpa1.pepstores.com:10080/smart-stream-jira/management/health")], "/opt/pep-finance-jira_prod")
+
+MavenDeploymentProfile [] deploymentProfiles = new MavenDeploymentProfile[4]
+deploymentProfiles [0] = new MavenDeploymentProfile(this, "develop", "pepkorit-development-snapshots", "pitbin1", mavenTool, artifactName, appName, buildLocation, pomLocation, warModule, buildNode, [development1])
+deploymentProfiles [1] = new MavenDeploymentProfile(this, "release", "pepkorit-releases", "pitbin1", mavenTool, artifactName, appName, buildLocation, pomLocation, warModule, buildNode, [qa1])
+deploymentProfiles [2] = new MavenDeploymentProfile(this, "hotfix", "pepkorit-releases", "pitbin1", mavenTool, artifactName, appName, buildLocation, pomLocation, warModule, buildNode, [qa1])
+deploymentProfiles [3] = new MavenDeploymentProfile(this, "tag", "pepkorit-releases", "pitbin1", mavenTool, artifactName, appName, buildLocation, pomLocation, warModule, buildNode, [production1])
+
+MavenDeploymentProfile featureBranchProfile=deploymentProfiles[0]
+
+// Execute Pipeline Generic Pipeline
+new JavaMavenPipeline(this).executePipeline(deploymentProfiles, featureBranchProfile)
