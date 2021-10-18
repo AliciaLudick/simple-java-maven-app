@@ -6,7 +6,6 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 @SpringBootApplication
 public class SimpleJavaMavenAppApplication extends SpringBootServletInitializer{
 	@Override
@@ -21,4 +20,5 @@ public class SimpleJavaMavenAppApplication extends SpringBootServletInitializer{
 	public String hello() {
 		return "Hello World! =D";
 	}
+
 }
